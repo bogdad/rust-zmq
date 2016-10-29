@@ -443,6 +443,17 @@ impl Socket {
         if rc == -1i32 { Err(errno_to_error()) } else { Ok(()) }
     }
 
+    /// Stop accepting connections on a socket.
+    pub fn unbind(&mut self, endpoint: &str) -> Result<()> {
+        let c_str = ffi::CString::new(endpoint.as_bytes()).unwrap();
+
+        let rc = unsafe {
+            zmq_sys::zmq_unbind(self.sock, c_str.as_ptr())
+        };
+
+        if rc == -1i32 { Err(errno_to_error()) } else { Ok(()) }
+    }
+
     /// Connect a socket.
     pub fn connect(&mut self, endpoint: &str) -> Result<()> {
         let c_str = ffi::CString::new(endpoint.as_bytes()).unwrap();
