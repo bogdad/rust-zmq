@@ -454,6 +454,14 @@ impl Socket {
         if rc == -1i32 { Err(errno_to_error()) } else { Ok(()) }
     }
 
+    /// Close socket
+    pub fn close(&mut self) -> Result<()> {
+        let rc = unsafe {
+            zmq_sys::zmq_close(self.sock)
+        };
+        if rc == -1i32 { Err(errno_to_error()) } else { Ok(()) }
+    }
+
     /// Connect a socket.
     pub fn connect(&mut self, endpoint: &str) -> Result<()> {
         let c_str = ffi::CString::new(endpoint.as_bytes()).unwrap();
